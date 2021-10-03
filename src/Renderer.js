@@ -1,26 +1,32 @@
 import {Document, Font, Page, PDFDownloadLink, StyleSheet, Text, View} from "@react-pdf/renderer";
 import React, {useEffect, useState} from "react";
-import {Link, useParams} from "react-router-dom";
+import {Link, useParams, useLocation} from "react-router-dom";
+import queryString from 'query-string';
 import {getArrangement} from "./firebase";
 
 export default function Renderer() {
     const {id} = useParams();
+    const {search} = useLocation();
     const [arrangement, setArrangement] = useState(null);
+    let { exclude = []} = queryString.parse(search, {arrayFormat: 'separator', arrayFormatSeparator: '|'});
+    exclude = Array.isArray(exclude) ? exclude : [exclude];
 
     useEffect(() => {
         (async () => {
             try {
                 const data = await getArrangement(id);
+                data.persons = data.persons.filter(person => !exclude.includes(String(person.sequence)))
                 setArrangement(data);
             } catch (e) {
                 console.log(e);
                 alert('unable to load arrangement ' + id)
             }
         })();
-    }, [id]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     if (!arrangement) return (
-        <div>
+        <div className="form">
             <Link to="/">Home</Link>
             <br/>
             <br/>
@@ -81,7 +87,7 @@ export default function Renderer() {
     };
 
     return (
-        <div>
+        <div className="form">
             <Link to="/">Home</Link>
             <br/>
             <br/>

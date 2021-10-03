@@ -1,5 +1,5 @@
 import React, {useState} from "react";
-import {DatePicker, Input, Radio} from "antd";
+import {DatePicker, Input, Radio, Button} from "antd";
 import UsersTable from "./UsersTable";
 import {addArrangement} from "./firebase";
 import {useHistory} from "react-router-dom";
@@ -9,7 +9,7 @@ const { RangePicker } = DatePicker;
 export default function Prepare() {
     const {push} = useHistory();
     const [exam, setExam] = useState('');
-    const [shift, setShift] = useState(1);
+    const [shift, setShift] = useState('1');
     const [date, setDate] = useState(null);
     const [selected, setSelected] = useState({keys:[], items: []});
 
@@ -46,14 +46,15 @@ export default function Prepare() {
             <br/>
             <br/>
             <Radio.Group onChange={e => setShift(e.target.value)} value={shift}>
-                <Radio value={1}>Shift 1</Radio>
-                <Radio value={2}>Shift 2</Radio>
+                <Radio value='1'>Shift 1</Radio>
+                <Radio value='2'>Shift 2</Radio>
+                <Radio value='1 & 2'>Both</Radio>
             </Radio.Group>
             <RangePicker format='DD-MM-YYY HH:mm' showTime onChange={handleDates} />
             <br/>
             <br/>
             <UsersTable selected={selected.keys} onSelection={setSelected} />
-            <button onClick={handlePrepare}>Prepare</button>
+            <Button onClick={handlePrepare}>Prepare</Button>
         </div>
     );
 }

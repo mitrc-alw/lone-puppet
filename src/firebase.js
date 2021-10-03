@@ -1,5 +1,5 @@
 import { initializeApp } from "firebase/app";
-import { getFirestore, writeBatch, doc, collection, getDocs, addDoc, getDoc} from "firebase/firestore"
+import { getFirestore, writeBatch, doc, collection, getDocs, addDoc, getDoc, updateDoc, deleteDoc } from "firebase/firestore"
 
 const firebaseConfig = {
     apiKey: "AIzaSyAYERkcl18zIg4vzH1wF-M6bVp9myq71Tk",
@@ -36,15 +36,24 @@ export async function addArrangement(data) {
     return docRef.id;
 }
 
+export async function deleteArrangement(id) {
+    await deleteDoc(doc(db, "arrangements", id));
+}
+
 export async function getArrangement(id) {
     const docRef = doc(db, "arrangements", id);
     const docSnap = await getDoc(docRef);
 
     if (docSnap.exists()) {
-        return docSnap.data();
+        return {...docSnap.data(), id};
     } else {
         throw new Error('No such document!')
     }
+}
+
+export async function updateArrangement(id, data) {
+    const docRef = doc(db, "arrangements", id);
+    await updateDoc(docRef, data);
 }
 
 export async function getArrangements() {

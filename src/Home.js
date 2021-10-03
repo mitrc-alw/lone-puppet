@@ -1,7 +1,7 @@
 import readXlsxFile, {Email} from 'read-excel-file'
 import 'antd/dist/antd.css';
 import './App.css';
-import {Tabs} from "antd";
+import {Tabs, Button} from "antd";
 import {useState} from "react";
 import {setInvigilators} from "./firebase";
 import Prepare from "./Prepare";
@@ -126,13 +126,39 @@ export default function App() {
                     <div style={{color :'red'}}>{errors && errors.length > 0 && JSON.stringify(errors)}</div>
                     <UsersTable data={rows} />
                     <br/><br/>
-                    <button disabled={!rows.length} onClick={addRows}>Save Persons</button>
+                    <Button disabled={!rows.length} onClick={addRows}>Save Persons</Button>
                 </TabPane>
                 <TabPane tab="Prepare arrangement" key="2">
                     <Prepare />
                 </TabPane>
                 <TabPane tab="List arrangements" key="3">
                     <ListArrangements />
+                </TabPane>
+                <TabPane tab="Info" key="4">
+                    <div>
+                        <br/>
+                        <br/>
+                        <h4>Info</h4>
+                        <br/>
+                        <br/>
+                        <div>Generate duty given from <b>List arrangements -> Edit -> Unselect absentees -> Download PDF</b></div>
+                        <div>Make an arrangement final from <b>List arrangements -> Edit -> Toggle the final switch -> Save Arrangement</b></div>
+                        <div>Update an arrangement <b>List arrangements -> Edit -> Edit fields -> Save Arrangement</b></div>
+                        <div>Add More Persons <b>Add persons -> Upload Xls -> Remove mentioned errors if any -> Add</b></div>
+                        <br/>
+                        <br/>
+                        <div style={{display: "flex", justifyContent: "center"}}>
+                            <div style={{ width: '70vw' }}>
+                                <i>
+                                    Note: Application sequence should be unique among the persons.
+                                    Please make sure before uploading the xls that no same sequence is
+                                    present in the xls and the database. <br/>
+                                    However if you want to replace the previous database entry with the new one, you
+                                    can upload with the same key.
+                                </i>
+                            </div>
+                        </div>
+                    </div>
                 </TabPane>
             </Tabs>
         </div>

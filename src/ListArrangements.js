@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
-import {getArrangements} from "./firebase";
-import {List} from "antd";
+import {deleteArrangement, getArrangements} from "./firebase";
+import {Button, List} from "antd";
 import {Link} from "react-router-dom";
 
 export default function ListArrangements() {
@@ -21,6 +21,19 @@ export default function ListArrangements() {
         })();
     }, []);
 
+    const handleDelete = async (id) => {
+        const choice = window.confirm("Are you sure want to delete?");
+        if (choice) {
+            try {
+                await deleteArrangement(id);
+                setArrs(p => p.filter(arr => arr.id !== id));
+            } catch (e) {
+                console.log(e);
+                alert('unable to delete');
+            }
+        }
+    };
+
     return (
         <div>
             <h4>Arrangements</h4>
@@ -31,11 +44,16 @@ export default function ListArrangements() {
                 loading={loading}
                 renderItem={item => (
                     <List.Item
-                        actions={[<Link to={`render/${item.id}`}>Download PDF</Link>]}
+                        actions={[
+                            <Link to={`render/${item.id}`}>Download PDF</Link>,
+                            <Link to={`edit/${item.id}`}>Edit</Link>,
+                            <Button type='link' onClick={() => handleDelete(item.id)}>Delete</Button>,
+                        ]}
                     >
                         <List.Item.Meta
+                            avatar={item.isFinal ? <div className="final">Final</div> : null}
                             title={`${item.exam} (SHIFT - ${item.shift})`}
-                            description={`Timing ${item.date.startTime} TO ${item.date.endTime}`}
+                            description={`Timing - ${item.date.day} (${item.date.startTime} TO ${item.date.endTime})`}
                         />
                         <div>
                             {item.persons.length} Person(s) on Duty
