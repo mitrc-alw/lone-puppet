@@ -32,7 +32,7 @@ export default function Prepare() {
                 persons: selected.items,
                 createdAt: Date.now(),
             });
-            push(`render/${id}`);
+            push(`/render/${id}`);
         } catch (e) {
             console.log(e);
             alert('unable to prepare');

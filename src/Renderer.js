@@ -3,6 +3,39 @@ import React, {useEffect, useState} from "react";
 import {Link, useParams, useLocation} from "react-router-dom";
 import queryString from 'query-string';
 import {getArrangement} from "./firebase";
+import writeXlsxFile from 'write-excel-file';
+import {Button} from "antd";
+
+const schema = arr => [
+    {
+        column: 'Name of Staff',
+        type: String,
+        value: item => item.firstName + " " + item.lastName,
+        width: 40,
+    },
+    {
+        column: 'Role of Duty',
+        type: String,
+        value: item => item.role,
+        width: 40,
+    },
+    {
+        column: 'Amount',
+        type: Number,
+        value: item => {
+            let amt = item.role === 'Invigilator' ? 200 : 400;
+            if (arr.shift === '1 & 2') amt *= 2;
+            return amt;
+        },
+        width: 20,
+    },
+    {
+        column: 'Signature',
+        type: String,
+        value: () => '',
+        width: 30,
+    },
+];
 
 export default function Renderer() {
     const {id} = useParams();
@@ -86,6 +119,18 @@ export default function Renderer() {
         );
     };
 
+    const preparePayment = async () => {
+        try {
+            await writeXlsxFile(arrangement.persons, {
+                schema: schema(arrangement),
+                fileName: 'file.xlsx'
+            })
+        } catch (e) {
+            console.log(e);
+            alert('unable to generate payment');
+        }
+    };
+
     return (
         <div className="form">
             <Link to="/">Home</Link>
@@ -96,6 +141,9 @@ export default function Renderer() {
                     loading ? 'Loading document...' : 'Download now!'
                 }
             </PDFDownloadLink>
+            <br/>
+            <br/>
+            <Button type='link' onClick={preparePayment}>Download Payment</Button>
         </div>
     );
 }

@@ -145,6 +145,7 @@ export default function App() {
                         <div>Make an arrangement final from <b>List arrangements -> Edit -> Toggle the final switch -> Save Arrangement</b></div>
                         <div>Update an arrangement <b>List arrangements -> Edit -> Edit fields -> Save Arrangement</b></div>
                         <div>Add More Persons <b>Add persons -> Upload Xls -> Remove mentioned errors if any -> Add</b></div>
+                        <div>Generate Payment <b>Edit and update the list -> Download PDF -> Download Payment</b></div>
                         <br/>
                         <br/>
                         <div style={{display: "flex", justifyContent: "center"}}>

@@ -45,8 +45,8 @@ export default function ListArrangements() {
                 renderItem={item => (
                     <List.Item
                         actions={[
-                            <Link to={`render/${item.id}`}>Download PDF</Link>,
-                            <Link to={`edit/${item.id}`}>Edit</Link>,
+                            <Link to={`/render/${item.id}`}>Download PDF</Link>,
+                            <Link to={`/edit/${item.id}`}>Edit</Link>,
                             <Button type='link' onClick={() => handleDelete(item.id)}>Delete</Button>,
                         ]}
                     >

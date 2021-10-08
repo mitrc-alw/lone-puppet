@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {BrowserRouter, Redirect, Route, Switch} from 'react-router-dom'
+import {BrowserRouter, Route, Switch} from 'react-router-dom'
 import Home from "./Home";
 import Renderer from "./Renderer";
 import EditArrangement from "./EditArrangement";
@@ -18,24 +18,21 @@ export default function App() {
     }, []);
 
     let content = (
-        <>
+        <Switch>
             <Route exact path='/render/:id' component={Renderer}/>
             <Route exact path='/edit/:id' component={EditArrangement}/>
             <Route path='/' component={Home}/>
-        </>
+        </Switch>
     );
     if (!auth) content = (
-        <>
-            <Route exact path='/' render={() => <Login setAuth={setAuth}/>}/>
-            <Redirect to='/' />
-        </>
+        <Switch>
+            <Route path='/' render={() => <Login setAuth={setAuth}/>}/>
+        </Switch>
     );
 
     return (
         <BrowserRouter>
-            <Switch>
-                {content}
-            </Switch>
+            {content}
         </BrowserRouter>
     );
 }
